@@ -77,10 +77,6 @@ class GraphTest {
 		assertTrue("Method fail in the weight: "+4+" to "+2,g.getNodes().get(4).edges.containsValue(10));
 	}
 		
-	@Test
-	void dijkstraTest() {
-		setUp3();		
-		System.out.println(g.dijkstras(1));
-	}
+
 	
 }
