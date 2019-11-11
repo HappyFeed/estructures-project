@@ -1,101 +1,140 @@
 package model;
 
-import java.util.*; 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.PriorityQueue;
+import java.util.Queue;
+import java.util.Stack;
+import java.util.function.BiConsumer;
+import java.util.stream.Collectors;
 
-public class Graph<T> { 
-  
-    // We use Hashmap to store the edges in the graph 
-    private Map<T, List<T> > map = new HashMap<>(); 
-  
-    // This function adds a new vertex to the graph 
-    public void addVertex(T s) 
-    { 
-        map.put(s, new LinkedList<T>()); 
-    } 
-  
-    // This function adds the edge 
-    // between source to destination 
-    public void addEdge(T source, 
-                        T destination, 
-                        boolean bidirectional) 
-    { 
-  
-        if (!map.containsKey(source)) 
-            addVertex(source); 
-  
-        if (!map.containsKey(destination)) 
-            addVertex(destination); 
-  
-        map.get(source).add(destination); 
-        if (bidirectional == true) { 
-            map.get(destination).add(source); 
-        } 
-    } 
-  
-    // This function gives the count of vertices 
-    public void getVertexCount() 
-    { 
-        System.out.println("The graph has "
-                           + map.keySet().size() 
-                           + " vertex"); 
-    } 
-  
-    // This function gives the count of edges 
-    public void getEdgesCount(boolean bidirection) 
-    { 
-        int count = 0; 
-        for (T v : map.keySet()) { 
-            count += map.get(v).size(); 
-        } 
-        if (bidirection == true) { 
-            count = count / 2; 
-        } 
-        System.out.println("The graph has "
-                           + count 
-                           + " edges."); 
-    } 
-  
-    // This function gives whether 
-    // a vertex is present or not. 
-    public void hasVertex(T s) 
-    { 
-        if (map.containsKey(s)) { 
-            System.out.println("The graph contains "
-                               + s + " as a vertex."); 
-        } 
-        else { 
-            System.out.println("The graph does not contain "
-                               + s + " as a vertex."); 
-        } 
-    } 
-  
-    // This function gives whether an edge is present or not. 
-    public void hasEdge(T s, T d) 
-    { 
-        if (map.get(s).contains(d)) { 
-            System.out.println("The graph has an edge between "
-                               + s + " and " + d + "."); 
-        } 
-        else { 
-            System.out.println("The graph has no edge between "
-                               + s + " and " + d + "."); 
-        } 
-    } 
-  
-    // Prints the adjancency list of each vertex. 
-    @Override
-    public String toString() 
-    { 
-        StringBuilder builder = new StringBuilder(); 
-  
-        for (T v : map.keySet()) { 
-            builder.append(v.toString() + ": "); 
-            for (T w : map.get(v)) { 
-                builder.append(w.toString() + " "); 
-            } 
-            builder.append("\n"); 
-        } 
-  
-        return (builder.toString()); 
-    } 
+public class Graph<T> {
+
+    public class Node {
+        public T value;
+        public Map<Integer, Integer> edges;
+
+        public Node(T value) {
+            this.value = value;
+            edges = new HashMap<>();
+        }
+        
+        public T getValue() {
+        	return value;
+        }
+    }
+
+    public List<Node> nodes;
+
+    public boolean directed;
+    public int numNodes = 0;
+    public int numEdges = 0;
+
+    public Graph() {
+        this(false);
+    }
+
+    public Graph(boolean directed) {
+        nodes = new ArrayList<>();
+        this.directed = directed;
+    }
+
+    public List<Node> getNodes(){
+    	return nodes;
+    }
+    
+    public void addNode(T value) {
+    	int a= (int) Math.pow(10,5);
+    	for (int i = 0; i < a; i++) {
+    		int v=(int) value;
+			if(v==i) {
+				nodes.add(i,new Node(value));
+			}else {
+				nodes.add(null);
+			}
+		}
+        
+    }
+
+    public void connect(int i, int j, int weight) {
+        nodes.get(i).edges.put(j, weight);
+        if (!directed)
+            nodes.get(j).edges.put(i, weight);
+    }
+
+    public class DijkstrasNode extends Node {
+        int dist = -1;
+        boolean visited = false;
+        DijkstrasNode previous;
+
+        public DijkstrasNode(T value) {
+            super(value);
+        }
+
+        public DijkstrasNode(Node node) {
+            super(node.value);
+            this.edges = node.edges;
+        }
+    }
+
+    public void processBFS(int source, BiConsumer<Node, Integer> consumer) {
+        Queue<Integer> q = new LinkedList<>();
+        boolean[] visited = new boolean[nodes.size()];
+        q.add(source);
+        while (!q.isEmpty()) {
+            int id = q.poll();
+            if (visited[id])
+                continue;
+            visited[id] = true;
+            Node n = nodes.get(id);
+            consumer.accept(n, id);
+            for (int c: n.edges.keySet())
+                q.add(c);
+        }
+    }
+
+    public void processDFS(int source, BiConsumer<Node, Integer> consumer) {
+        Stack<Integer> q = new Stack<>();
+        boolean[] visited = new boolean[nodes.size()];
+        q.push(source);
+        while (!q.isEmpty()) {
+            int id = q.pop();
+            if (visited[id])
+                continue;
+            visited[id] = true;
+            Node n = nodes.get(id);
+            consumer.accept(n, id);
+            for (int c: n.edges.keySet())
+                q.add(c);
+        }
+    }
+
+    public List<DijkstrasNode> dijkstras(int source) {
+        List<DijkstrasNode> djk = nodes.stream().map(DijkstrasNode::new).collect(Collectors.toList());
+        djk.get(source).dist = 0;
+        PriorityQueue<DijkstrasNode> q = new PriorityQueue<>((i, j) -> i.dist - j.dist);
+        q.add(djk.get(source));
+        int visitCount = 0;
+        while (!q.isEmpty() && visitCount < djk.size()) {
+            DijkstrasNode n = q.poll();
+            if (n.visited)
+                continue;
+            n.visited = true;
+            visitCount++;
+            for (int child : n.edges.keySet()) {
+                DijkstrasNode cn = djk.get(child);
+                if (!cn.visited && (cn.dist == -1 || n.dist + n.edges.get(child) < cn.dist)) {
+                    if (cn.dist != -1)
+                        q.remove(cn);
+                    cn.dist = n.dist + n.edges.get(child);
+                    cn.previous = n;
+                    q.add(cn);
+                }
+            }
+        }
+        return djk;
+    }
 } 
