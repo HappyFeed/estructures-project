@@ -201,7 +201,7 @@ public class Graph<T> {
             System.out.println();
         } 
     }
-    
+
     
     public int[] prim(){ 
     	ArrayList<Node> a=vertex();
@@ -254,5 +254,56 @@ public class Graph<T> {
         }
              
     } 
+
+    public void kruskalMST(int cost[][]) { 
     
+        int mincost = 0; 
+        
+        ArrayList<Node> a=vertex();
+        int[] parent = new int[a.size()];
+      
+        
+        for (int i = 0; i < a.size(); i++) 
+            parent[i] = i; 
+      
+       
+        int edge_count = 0; 
+        while (edge_count < a.size() - 1) 
+        { 
+            int min = Integer.MAX_VALUE, c = -1, b = -1; 
+            for (int i = 0; i < a.size(); i++) 
+            { 
+                for (int j = 0; j < a.size(); j++)  
+                { 
+                    if (find(i, parent) != find(j, parent) && cost[i][j] < min)  
+                    { 
+                        min = cost[i][j]; 
+                        c = i; 
+                        b = j; 
+                    } 
+                } 
+            } 
+      
+            union1(c, b, parent); 
+            System.out.printf("Edge %d:(%d, %d) cost:%d \n", 
+                edge_count++, a, b, min); 
+            mincost += min; 
+        } 
+        System.out.printf("\n Minimum cost= %d \n", mincost); 
+    } 
+    
+    void union1(int i, int j, int[] parent) 
+    { 
+        int a = find(i, parent); 
+        int b = find(j, parent); 
+        parent[a] = b; 
+    }
+    
+    int find(int i, int[] parent) 
+    { 
+        while (parent[i] != i) 
+            i = parent[i]; 
+        return i; 
+    }
+   
 } 
