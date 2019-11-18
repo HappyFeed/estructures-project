@@ -13,6 +13,8 @@ import java.util.stream.Collectors;
 
 public class Graph<T> {
 
+	public final static int NILL= 100;
+	
     public class Node {
         public T value;
         public Map<Integer, Integer> edges;
@@ -47,7 +49,7 @@ public class Graph<T> {
     }
     
     public void addNode(T value) {
-    	int a= (int) Math.pow(10,5);
+    	int a= NILL;
     	for (int i = 0; i < a; i++) {
     		int v=(int) value;
 			if(v==i) {
@@ -136,5 +138,62 @@ public class Graph<T> {
             }
         }
         return djk;
+    }
+    
+    public ArrayList<Node> vertex(){   	
+    	ArrayList<Node> a= new ArrayList<Node>();
+    	for (int i = 0; i < nodes.size(); i++) {
+			if(nodes.get(i)!=null) {
+				a.add(nodes.get(i));
+			}
+		}
+    	return a;
+    }
+    
+    public void floydWarshall(){    
+    	ArrayList<Node> a=vertex();
+        int dist[][] = new int[a.size()][a.size()]; 
+        int i, j, k; 
+        for (i = 0; i < a.size(); i++) {
+            for (j = 0; j < a.size(); j++) {        	
+                int v= (int) a.get(j).getValue();
+                if(i==j){
+                	dist[i][j] =0;
+                }else if(a.get(i).edges.containsKey(v)) {
+                	dist[i][j] = a.get(i).edges.get(v);
+                }else {
+                	dist[i][j] =NILL;
+                }
+            }		    
+        }
+
+        for (k = 0; k < a.size(); k++) 
+        { 
+            for (i = 0; i <a.size(); i++) 
+            { 
+                for (j = 0; j <a.size(); j++) 
+                { 
+                    if (dist[i][k] + dist[k][j] < dist[i][j]) 
+                        dist[i][j] = dist[i][k] + dist[k][j]; 
+                } 
+            } 
+        } 
+
+        printSolution(dist);
+    }
+    
+    public void printSolution(int dist[][]) { 
+    	ArrayList<Node> a=vertex();
+        for (int i=0; i<a.size(); ++i) 
+        { 
+            for (int j=0; j<a.size(); ++j) 
+            { 
+                if (dist[i][j]==NILL) 
+                    System.out.print("N"); 
+                else
+                    System.out.print(dist[i][j]+"   "); 
+            } 
+            System.out.println();
+        } 
     }
 } 
