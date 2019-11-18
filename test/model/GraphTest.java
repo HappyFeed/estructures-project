@@ -25,19 +25,35 @@ class GraphTest {
 		g.addNode(3);
 		g.addNode(4);
 	}
-	
+		
 	public void setUp3() {
 		g= new Graph<Integer>();
-		for (int i = 0; i <= 5; i++) {
-			g.addNode(i);
-		}
-		g.connect(0, 1, 1);	
-		g.connect(0, 2, 1);	
-		g.connect(1, 3, 1);	
-		g.connect(1, 4, 1);	
-		g.connect(2, 3, 1);	
-		g.connect(3, 5, 1);	
-		g.connect(4, 5, 1);	
+		g.addNode(1);
+		g.addNode(2);
+		g.addNode(3);
+		g.addNode(4);
+		g.addNode(5);
+		g.connect(1, 2, 2);
+		g.connect(2, 5, 4);
+		g.connect(5, 4, 6);
+		g.connect(2, 4, 15);
+		g.connect(1, 3, 12);
+		g.connect(3, 4, 3);
+		g.connect(3, 2, 7);
+
+	}
+	
+	public void setUp4() {
+	    g= new Graph<Integer>(true);
+		g.addNode(1);
+		g.addNode(2);
+		g.addNode(3);
+		g.addNode(4);
+		g.connect(1, 3, -2);
+		g.connect(3, 4, 2);
+		g.connect(4, 2, -1);
+		g.connect(2, 3, 3);
+		g.connect(2, 1, 4);
 
 	}
 	
@@ -82,6 +98,27 @@ class GraphTest {
 		assertTrue("Method fail in the weight: "+4+" to "+2,g.getNodes().get(4).edges.containsValue(10));
 	}
 		
-
+	@Test
+	void floydWharshallTest() {
+		setUp4();
+		int[][] dist=g.floydWarshall();
+		int[][] comp= {{0,-1,-2,0},{4,0,2,4},{5,1,0,2},{3,-1,1,0}};
+		for (int i = 0; i < dist.length; i++) {
+			for (int j = 0; j < dist[i].length; j++) {
+				assertTrue("Method fail",dist[i][j]==comp[i][j]);
+			}
+		}
+	}
 	
+	@Test
+	void primTest() {
+		setUp3();
+		List<Graph<Integer>.Node> a=g.vertex();
+		int[] dist=g.prim();
+		int[] comp= {0,1,4,5,2};
+		for (int k = 1; k < dist.length; k++) {
+			assertTrue("Method fail "+dist[k], a.get(dist[k]).getValue()==comp[k]);
+		}
+		
+	}
 }

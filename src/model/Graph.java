@@ -1,6 +1,7 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -14,6 +15,9 @@ import java.util.stream.Collectors;
 public class Graph<T> {
 
 	public final static int NILL= 100;
+	public final static int WHITE= 1;
+	public final static int BLACK= 0;
+	public final static int ROOT= -1;
 	
     public class Node {
         public T value;
@@ -150,7 +154,7 @@ public class Graph<T> {
     	return a;
     }
     
-    public void floydWarshall(){    
+    public int[][] floydWarshall(){    
     	ArrayList<Node> a=vertex();
         int dist[][] = new int[a.size()][a.size()]; 
         int i, j, k; 
@@ -180,6 +184,7 @@ public class Graph<T> {
         } 
 
         printSolution(dist);
+        return dist;
     }
     
     public void printSolution(int dist[][]) { 
@@ -196,4 +201,58 @@ public class Graph<T> {
             System.out.println();
         } 
     }
+    
+    
+    public int[] prim(){ 
+    	ArrayList<Node> a=vertex();
+        int parent[] = new int[a.size()]; 
+        int key[] = new int[a.size()]; 
+        Boolean mstSet[] = new Boolean[a.size()]; 
+        for (int i = 0; i < a.size(); i++) { 
+            key[i] = Integer.MAX_VALUE; 
+            mstSet[i] = false; 
+        }
+        key[0] = 0; 
+        parent[0] = ROOT;   
+        for (int count = 0; count < a.size()- 1; count++) { 
+            int u = minKey(key, mstSet);       
+            mstSet[u] = true; 
+            for (int v = 0; v < a.size(); v++) {
+            	int l= (int) a.get(v).getValue();
+                if(a.get(count).edges.containsKey(l)) {
+                	if( mstSet[v] == false && a.get(count).edges.get(l)< key[v]) {
+                    	parent[v] = u; 
+                        key[v] = a.get(count).edges.get(l); 
+                	}
+                	
+                }                
+            }  
+           
+        } 
+       printPrim(parent);
+       return parent;
+    }
+    
+    public int minKey(int key[], Boolean mstSet[]) { 
+    	ArrayList<Node> a=vertex();
+        int min = Integer.MAX_VALUE, min_index = -1; 
+        for (int v = 0; v < a.size(); v++) {
+        	if (mstSet[v] == false && key[v] < min) { 
+                min = key[v]; 
+                min_index = v;
+            } 
+        }
+        return min_index; 
+    }
+    
+    public void printPrim(int parent[]) { 
+    	ArrayList<Node> a=vertex();
+        System.out.println("Edge \tWeight"); 
+        for (int i = 1; i < a.size(); i++) {
+        	int l= (int) a.get(parent[i]).getValue();
+        	System.out.println(a.get(parent[i]).getValue() + " - " + a.get(i).getValue() + "\t" + a.get(i).edges.get(l));
+        }
+             
+    } 
+    
 } 
