@@ -51,11 +51,16 @@ class GraphTest {
 	
 	@Test
 	void addTest() {
-		setUp1();		
-		g.addNode(1);
-		g.addNode(2);
-		g.addNode(3);
-		g.addNode(4);
+		setUp1();	
+		int node1 = 1;
+		int node2 = 2;
+		int node3 = 3;
+		int node4 = 4;
+		
+		g.addNode(node1);
+		g.addNode(node2);
+		g.addNode(node3);
+		g.addNode(node4);
 		assertTrue("Method fail in value "+1,g.getNodes().get(1).getValue()==1);
 		assertTrue("Method fail in value "+2,g.getNodes().get(2).getValue()==2);
 		assertTrue("Method fail in value "+3,g.getNodes().get(3).getValue()==3);
