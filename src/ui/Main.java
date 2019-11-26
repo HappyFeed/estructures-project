@@ -1,6 +1,6 @@
 package ui;
 
-import model.Graph;
+import model.AdjListGraph;
 
 public class Main { 
 	  
@@ -8,33 +8,33 @@ public class Main {
     { 
   
         // Object of graph is created. 
-        Graph<Integer> g = new Graph<Integer>(); 
+    	AdjListGraph<Integer> g = new AdjListGraph<Integer>(false, false); 
   
         // edges are added. 
         // Since the graph is bidirectional, 
         // so boolean bidirectional is passed as true. 
-        g.addEdge(0, 1, true); 
-        g.addEdge(0, 4, true); 
-        g.addEdge(1, 2, true); 
-        g.addEdge(1, 3, true); 
-        g.addEdge(1, 4, true); 
-        g.addEdge(2, 3, true); 
-        g.addEdge(3, 4, true); 
+        g.addEdge(0, 1); 
+        g.addEdge(0, 4); 
+        g.addEdge(1, 2); 
+        g.addEdge(1, 3); 
+        g.addEdge(1, 4); 
+        g.addEdge(2, 3); 
+        g.addEdge(3, 4); 
   
         // print the graph. 
         System.out.println("Graph:\n"
                            + g.toString()); 
   
         // gives the no of vertices in the graph. 
-        g.getVertexCount(); 
+        g.getNumberOfVertices(); 
   
         // gives the no of edges in the graph. 
-        g.getEdgesCount(true); 
+        g.getNumberOfEdges(); 
   
         // tells whether the edge is present or not. 
-        g.hasEdge(3, 4); 
+        g.areAdjacent(g.searchVertex(3), g.searchVertex(4)); 
   
         // tells whether vertex is present or not 
-        g.hasVertex(5); 
+        g.searchVertex(5); 
     } 
 } 
