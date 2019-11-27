@@ -310,7 +310,9 @@ public class AdjListGraph<T> implements IGraph<T> {
 		s.setD(0);
 	}
 
-	public void dijkstra(Vertex<T> x) {
+	public int dijkstra(Vertex<T> x, double w) {
+		int pairsPassedBy = 0;
+		
 		AdjVertex<T> s = (AdjVertex<T>) x;
 		initSingleSource(s);
 		PriorityQueue<AdjVertex<T>> queue = new PriorityQueue<>();
@@ -319,10 +321,12 @@ public class AdjListGraph<T> implements IGraph<T> {
 			AdjVertex<T> u = queue.poll();
 
 			for (Edge<T> e : u.getAdjList()) {
-
+				
 				AdjVertex<T> v = (AdjVertex<T>) e.getDestination();
 				double weight = e.getWeight();
-
+				if(weight == w) {
+					pairsPassedBy++;
+				}
 				// relax(u,v,weight)
 				double distanceFromU = u.getD() + weight;
 				if (distanceFromU < v.getD()) {
@@ -334,6 +338,8 @@ public class AdjListGraph<T> implements IGraph<T> {
 				}
 			}
 		}
+		
+		return pairsPassedBy;
 	}
 
 	public double[][] floydwarshall() {

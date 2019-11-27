@@ -1,6 +1,7 @@
 package ui;
 
 import model.AdjListGraph;
+import model.Vertex;
 
 public class Main { 
 
@@ -14,13 +15,13 @@ public class Main {
         // edges are added. 
         // Since the graph is bidirectional, 
         // so boolean bidirectional is passed as true. 
-        g.addEdge(0, 1); 
-        g.addEdge(0, 4); 
-        g.addEdge(1, 2); 
-        g.addEdge(1, 3); 
-        g.addEdge(1, 4); 
-        g.addEdge(2, 3); 
-        g.addEdge(3, 4); 
+        g.addEdge(0, 1, 1); 
+        g.addEdge(0, 4, 2); 
+        g.addEdge(1, 2, 1); 
+        g.addEdge(1, 3, 2); 
+        g.addEdge(1, 4, 1); 
+        g.addEdge(2, 3, 1); 
+        g.addEdge(3, 4, 4); 
   
         // print the graph. 
         System.out.println("Graph:\n"
@@ -37,6 +38,9 @@ public class Main {
   
         // tells whether vertex is present or not 
         g.searchVertex(5); 
+        
+        Vertex<Integer> v = g.searchVertex(3);
+        g.dijkstra(v, 4);
     } 
     
 }
