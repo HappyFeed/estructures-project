@@ -1,17 +1,37 @@
 package ui;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+
 import model.AdjListGraph;
 import model.Vertex;
 
 public class Main { 
 
 	  
-    public static void main(String args[]) 
+    public static void main(String args[]) throws IOException 
     { 
   
         // Object of graph is created. 
     	AdjListGraph<Integer> g = new AdjListGraph<Integer>(false, false); 
-  
+    	BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    	
+    	String[] nQ = br.readLine().split(" ");
+    	
+    	int nodes = Integer.parseInt(nQ[0]);
+    	int queries = Integer.parseInt(nQ[1]);
+    	
+    	for (int i = 0; i < queries; i++) {
+			String[] vertex = br.readLine().split(" ");
+			int val1 = Integer.parseInt(vertex[0]);
+			int val2 = Integer.parseInt(vertex[1]);
+			
+			Vertex<Integer> v1 = new Vertex<Integer>(val1);
+			Vertex<Integer> v2 = new Vertex<Integer>(val2);
+			g.addVertex(v1.getValue());
+			g.addVertex(v2.getValue());
+		}
         // edges are added. 
         // Since the graph is bidirectional, 
         // so boolean bidirectional is passed as true. 
