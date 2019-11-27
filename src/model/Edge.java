@@ -32,6 +32,14 @@ public class Edge<T> implements Comparable<Edge<T>>{
 	public Vertex<T> getDestination() {
 		return destination;
 	}
+	
+	public boolean areTheSame(Edge<T> o) {
+		boolean same = false;
+		if(o.getSource().equals(source)&&o.getDestination().equals(destination)) {
+			same = true;
+		}
+		return same;
+	}
 
 	@Override
 	public int compareTo(Edge<T> o) {

@@ -18,6 +18,8 @@ public class AdjListGraph<T> implements IGraph<T> {
 
 	private List<Vertex<T>> vertices;
 	private HashMap<T, AdjVertex<T>> map;
+	
+	private List<Edge<T>> bfsEdges;
 
 	public AdjListGraph(boolean directed, boolean weighted) {
 		this.directed = directed;
@@ -30,6 +32,10 @@ public class AdjListGraph<T> implements IGraph<T> {
 
 	public List<Vertex<T>> getVertices() {
 		return vertices;
+	}
+	
+	public List<Edge<T>> getBfsEdges() {
+		return bfsEdges;
 	}
 
 	public int getNumberOfVertices() {
@@ -216,6 +222,18 @@ public class AdjListGraph<T> implements IGraph<T> {
 					v.setColor(Vertex.GRAY);
 					v.setD(u.getD() + 1);
 					v.setPred(u);
+					Edge<T> e = new Edge<T>(u, v, 1);
+					boolean stop = false;
+					for (int j = 0; j < bfsEdges.size() || !stop; j++) {
+						if(e.areTheSame(bfsEdges.get(i))) {
+							bfsEdges.get(i).setWeight(bfsEdges.get(i).getWeight()+1);
+							stop = true;
+						}
+					}
+					if(!stop) {
+						bfsEdges.add(e);
+					}
+					
 					q.offer(v);
 				}
 			}
