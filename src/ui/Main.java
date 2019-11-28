@@ -3,6 +3,7 @@ package ui;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 
 import model.AdjListGraph;
 import model.Vertex;
@@ -40,17 +41,19 @@ public class Main {
     	for (int i = 0; i < queries; i++) {
     		String line = br.readLine();
     		int value = Integer.parseInt(line);
-			g.getEdgeCount().get(i).setName(value);
-			g.getEdges().get(i).setName(value);
 		}
     	
     	br.close();
-    	
-    	g.floydwarshall();
+    	for (int i = 0; i < g.getVertices().size(); i++) {
+    		g.dijkstra(g.getVertices().get(i),1);		
+		}
     	
     	for (int i = 0; i < g.getEdgeCount().size(); i++) {
-			System.out.println(g.getEdgeCount().get(i).getWeight());
+			System.out.println(g.getEdgeCount().get(i).getTimes());
 		}
+    	//g.floydwarshall();
+    	
+
     	
         // edges are added. 
         // Since the graph is bidirectional, 

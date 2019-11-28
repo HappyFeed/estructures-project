@@ -6,10 +6,11 @@ public class Edge<T> implements Comparable<Edge<T>>{
 
 	private Vertex<T> source;
 	private Vertex<T> destination;
-	private int name;
+	private int time;
 
 	public Edge(Vertex<T> source, Vertex<T> destination) {
 		this(source, destination, 1D);
+		this.time=0;
 	}
 
 	public Edge(Vertex<T> source, Vertex<T> destination, double weight) {
@@ -26,12 +27,12 @@ public class Edge<T> implements Comparable<Edge<T>>{
 		this.weight = weight;
 	}
 	
-	public int getName() {
-		return name;
+	public int getTimes() {
+		return time;
 	}
 	
-	public void setName(int name) {
-		this.name = name;
+	public void setTimes(int name) {
+		this.time=time+ name;
 	}
 
 	public Vertex<T> getSource() {

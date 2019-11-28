@@ -321,9 +321,9 @@ public class AdjListGraph<T> implements IGraph<T> {
 		s.setD(0);
 	}
 
-	public int dijkstra(Vertex<T> x, double w) {
-		int pairsPassedBy = 0;
-		
+	public ArrayList<Integer> dijkstra(Vertex<T> x, double w) {
+
+		ArrayList<Integer> a= new ArrayList<Integer>();
 		AdjVertex<T> s = (AdjVertex<T>) x;
 		initSingleSource(s);
 		PriorityQueue<AdjVertex<T>> queue = new PriorityQueue<>();
@@ -336,7 +336,12 @@ public class AdjListGraph<T> implements IGraph<T> {
 				AdjVertex<T> v = (AdjVertex<T>) e.getDestination();
 				double weight = e.getWeight();
 				if(weight == w) {
-					pairsPassedBy++;
+					for (int i = 0; i < edgeCount.size(); i++) {
+						System.out.println("si1");
+						if(e==edgeCount.get(i)) {
+							edgeCount.get(i).setTimes(1);
+						}
+					}
 				}
 				// relax(u,v,weight)
 				double distanceFromU = u.getD() + weight;
@@ -350,7 +355,7 @@ public class AdjListGraph<T> implements IGraph<T> {
 			}
 		}
 		
-		return pairsPassedBy;
+		return a;
 	}
 
 	public double[][] floydwarshall() {
@@ -377,9 +382,9 @@ public class AdjListGraph<T> implements IGraph<T> {
 				AdjVertex<T> v = (AdjVertex<T>) e.getDestination();
 				double weight = e.getWeight();
 				weights[i][getIndexOf(v)] = weight;
-				int name = e.getName();
-				int index = index(name);
-				edgeCount.get(index).setWeight(edgeCount.get(index).getWeight()+1);
+				//int name = e.getName();
+				//int index = index(name);
+				//edgeCount.get(index).setWeight(edgeCount.get(index).getWeight()+1);
 			}
 		}
 		return weights;
@@ -387,9 +392,9 @@ public class AdjListGraph<T> implements IGraph<T> {
 	
 	public int index(int name) {
 		for (int i = 0; i < edgeCount.size(); i++) {
-			if(edgeCount.get(i).getName() == name) {
+			/*if(edgeCount.get(i).getName() == name) {
 				name = i;
-			}
+			}*/
 		}
 		return name;
 	}
