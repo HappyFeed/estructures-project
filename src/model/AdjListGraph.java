@@ -19,7 +19,7 @@ public class AdjListGraph<T> implements IGraph<T> {
 	private List<Vertex<T>> vertices;
 	private HashMap<T, AdjVertex<T>> map;
 	
-	private List<Edge<T>> bfsEdges;
+	private List<Edge<T>> edgeCount;
 
 	public AdjListGraph(boolean directed, boolean weighted) {
 		this.directed = directed;
@@ -28,14 +28,15 @@ public class AdjListGraph<T> implements IGraph<T> {
 		numberOfEdges = getNumberOfEdges();
 		vertices = new LinkedList<Vertex<T>>();
 		map = new HashMap<>();
+		edgeCount = new LinkedList<Edge<T>>();
 	}
 
 	public List<Vertex<T>> getVertices() {
 		return vertices;
 	}
 	
-	public List<Edge<T>> getBfsEdges() {
-		return bfsEdges;
+	public List<Edge<T>> getEdgeCount() {
+		return edgeCount;
 	}
 
 	public int getNumberOfVertices() {
@@ -52,6 +53,10 @@ public class AdjListGraph<T> implements IGraph<T> {
 
 	public boolean isWeighted() {
 		return weighted;
+	}
+	
+	public void addEfgeCount() {
+		
 	}
 
 	@Override
@@ -222,18 +227,6 @@ public class AdjListGraph<T> implements IGraph<T> {
 					v.setColor(Vertex.GRAY);
 					v.setD(u.getD() + 1);
 					v.setPred(u);
-					Edge<T> e = new Edge<T>(u, v, 1);
-					boolean stop = false;
-					for (int j = 0; j < bfsEdges.size() || !stop; j++) {
-						if(e.areTheSame(bfsEdges.get(i))) {
-							bfsEdges.get(i).setWeight(bfsEdges.get(i).getWeight()+1);
-							stop = true;
-						}
-					}
-					if(!stop) {
-						bfsEdges.add(e);
-					}
-					
 					q.offer(v);
 				}
 			}
@@ -384,9 +377,21 @@ public class AdjListGraph<T> implements IGraph<T> {
 				AdjVertex<T> v = (AdjVertex<T>) e.getDestination();
 				double weight = e.getWeight();
 				weights[i][getIndexOf(v)] = weight;
+				int name = e.getName();
+				int index = index(name);
+				edgeCount.get(index).setWeight(edgeCount.get(index).getWeight()+1);
 			}
 		}
 		return weights;
+	}
+	
+	public int index(int name) {
+		for (int i = 0; i < edgeCount.size(); i++) {
+			if(edgeCount.get(i).getName() == name) {
+				name = i;
+			}
+		}
+		return name;
 	}
 
 	public void prim(Vertex<T> s) {

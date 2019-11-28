@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 
 import model.AdjListGraph;
 import model.Vertex;
+import model.Edge;
 
 public class Main { 
 
@@ -14,12 +15,16 @@ public class Main {
     { 
   
         // Object of graph is created. 
-    	AdjListGraph<Integer> g = new AdjListGraph<Integer>(false, false); 
+    	AdjListGraph<Integer> g = new AdjListGraph<Integer>(false, true); 
     	BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     	
     	String[] nQ = br.readLine().split(" ");
     	
     	int nodes = Integer.parseInt(nQ[0]);
+    	for (int i = 0; i < nodes; i++) {
+    		Vertex<Integer> newVertex = new Vertex<Integer>(i+1);
+    		g.addVertex(newVertex.getValue());
+		}
     	int queries = Integer.parseInt(nQ[1]);
     	
     	for (int i = 0; i < queries; i++) {
@@ -27,23 +32,42 @@ public class Main {
 			int val1 = Integer.parseInt(vertex[0]);
 			int val2 = Integer.parseInt(vertex[1]);
 			
-			Vertex<Integer> v1 = new Vertex<Integer>(val1);
-			Vertex<Integer> v2 = new Vertex<Integer>(val2);
-			g.addVertex(v1.getValue());
-			g.addVertex(v2.getValue());
+			g.addEdge(val1, val2, 1);
+			Edge<Integer> e = new Edge<Integer>(g.getVertices().get(val1-1), g.getVertices().get(val2-1), 0);
+			g.getEdgeCount().add(e);
 		}
+    	
+    	for (int i = 0; i < queries; i++) {
+    		String line = br.readLine();
+    		int value = Integer.parseInt(line);
+			g.getEdgeCount().get(i).setName(value);
+			g.getEdges().get(i).setName(value);
+		}
+    	
+    	br.close();
+    	
+    	g.floydwarshall();
+    	
+    	for (int i = 0; i < g.getEdgeCount().size(); i++) {
+			System.out.println(g.getEdgeCount().get(i).getWeight());
+		}
+    	
         // edges are added. 
         // Since the graph is bidirectional, 
         // so boolean bidirectional is passed as true. 
-        g.addEdge(0, 1, 1); 
-        g.addEdge(0, 4, 2); 
+       /* g.addEdge(0, 1, 1); 
+        g.addEdge(0, 4, 1); 
         g.addEdge(1, 2, 1); 
-        g.addEdge(1, 3, 2); 
+        g.addEdge(1, 3, 1); 
         g.addEdge(1, 4, 1); 
         g.addEdge(2, 3, 1); 
-        g.addEdge(3, 4, 4); 
+        g.addEdge(3, 4, 1); */
   
         // print the graph. 
+    	
+    	
+    	/*
+    	 * 
         System.out.println("Graph:\n"
                            + g.toString()); 
   
@@ -61,6 +85,8 @@ public class Main {
         
         Vertex<Integer> v = g.searchVertex(3);
         g.dijkstra(v, 4);
+        
+        */
     } 
     
 }

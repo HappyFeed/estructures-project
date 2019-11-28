@@ -6,6 +6,7 @@ public class Edge<T> implements Comparable<Edge<T>>{
 
 	private Vertex<T> source;
 	private Vertex<T> destination;
+	private int name;
 
 	public Edge(Vertex<T> source, Vertex<T> destination) {
 		this(source, destination, 1D);
@@ -24,6 +25,14 @@ public class Edge<T> implements Comparable<Edge<T>>{
 	public void setWeight(double weight) {
 		this.weight = weight;
 	}
+	
+	public int getName() {
+		return name;
+	}
+	
+	public void setName(int name) {
+		this.name = name;
+	}
 
 	public Vertex<T> getSource() {
 		return source;
@@ -35,7 +44,7 @@ public class Edge<T> implements Comparable<Edge<T>>{
 	
 	public boolean areTheSame(Edge<T> o) {
 		boolean same = false;
-		if(o.getSource().equals(source)&&o.getDestination().equals(destination)) {
+		if(o.getSource().equals(source)&&o.getDestination().equals(destination) || o.getSource().equals(destination)&&o.getDestination().equals(source)) {
 			same = true;
 		}
 		return same;
